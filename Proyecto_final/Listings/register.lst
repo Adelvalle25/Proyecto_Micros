@@ -1,0 +1,64 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+    2 00000000                 THUMB
+    3 00000000                 REQUIRE8
+    4 00000000                 PRESERVE8
+    5 00000000         
+    6 00000000                 EXPORT           RD_display
+    7 00000000         
+    8 00000000         
+    9 00000000         RD_display
+   10 00000000         loop
+   11 00000000 7802            ldrb             r2, [r0]
+   12 00000002 3001            adds             r0, #1
+   13 00000004 700A            strb             r2, [r1]
+   14 00000006 3101            adds             r1, #1
+   15 00000008 2A00            cmp              r2, #0
+   16 0000000A D1F9            bne              loop
+   17 0000000C         
+                       
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
+interwork --depend=.\objects\register.d -o.\objects\register.o -I.\RTE\_Target_
+1 -IC:\Users\aadel\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include -
+IC:\Users\aadel\AppData\Local\Arm\Packs\Keil\STM32F3xx_DFP\2.1.0\Drivers\CMSIS\
+Device\ST\STM32F3xx\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_
+VERSION SETA 535" --predefine="_RTE_ SETA 1" --predefine="STM32F303xC SETA 1" -
+-predefine="_RTE_ SETA 1" --list=.\listings\register.lst register.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 1 in file register.s
+   Uses
+      None
+Comment: .text unused
+RD_display 00000000
+
+Symbol: RD_display
+   Definitions
+      At line 9 in file register.s
+   Uses
+      At line 6 in file register.s
+Comment: RD_display used once
+loop 00000000
+
+Symbol: loop
+   Definitions
+      At line 10 in file register.s
+   Uses
+      At line 16 in file register.s
+Comment: loop used once
+3 symbols
+338 symbols in table

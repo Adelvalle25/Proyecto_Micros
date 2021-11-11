@@ -7,9 +7,11 @@
 			
 			
 RD_display
-	ldrb r2, [R0]
-	strb R0, [r1]
-	bx lr
-
-
-
+loop
+	ldrb r2, [r0] 
+	adds r0, #1 
+	strb r2, [r1] 
+	adds r1, #1
+	cmp r2, #0 
+	bne loop 
+	
