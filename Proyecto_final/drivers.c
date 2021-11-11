@@ -15,6 +15,18 @@ void Rd_get(const char* a[]){
 	RD_display(*a);
 }
 
+void Rm_mod(){
+	
+}
+
+void Md(const uint8_t start, const uint8_t end){
+	
+}
+void Mm(uint16_t addr, uint8_t size){
+	
+}
+
+
 
 
 
@@ -63,6 +75,7 @@ void USART1_putString(char * string){
 		string++;
 	}
 }
+
 void USART1_IRQHandler(void){
 	if(USART1->ISR & USART_ISR_RXNE){
 		data= USART1->RDR;
