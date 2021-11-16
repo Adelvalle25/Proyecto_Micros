@@ -28,19 +28,19 @@ Project File Date:  11/11/2021
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'Target 1'
 assembling register.s...
-register.s(18): warning: A1313W: Missing END directive at end of file
+register.s(12): warning: A1313W: Missing END directive at end of file
 assembling startup_stm32f303xc.s...
 compiling system_stm32f3xx.c...
 compiling main.c...
-drivers.h(9): warning:  #1295-D: Deprecated declaration Rm_mod - give arg types
+drivers.h(10): warning:  #1295-D: Deprecated declaration Rm_mod - give arg types
   void Rm_mod();
 main.c: 1 warning, 0 errors
 compiling drivers.c...
-drivers.c(79): warning:  #1-D: last line of file ends without a newline
-  }
+drivers.c(13): warning:  #1295-D: Deprecated declaration RD_display - give arg types
+  extern void RD_display();
 drivers.c: 1 warning, 0 errors
 linking...
-Program Size: Code=1138 RO-data=450 RW-data=8 ZI-data=1728  
+Program Size: Code=2222 RO-data=706 RW-data=36 ZI-data=1668  
 ".\Objects\ProyectoFinal.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
@@ -67,10 +67,10 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:5.5.0
 
    * Component: Keil.Standalone::Device:Startup:1.0.0
-      Include file:  Drivers\CMSIS\Device\ST\STM32F3xx\Include\stm32f3xx.h
       Source file:   MDK\Device\Source\ARM\STM32F3xx_OPT.s
       Source file:   Drivers\CMSIS\Device\ST\STM32F3xx\Source\Templates\system_stm32f3xx.c
       Source file:   Drivers\CMSIS\Device\ST\STM32F3xx\Source\Templates\arm\startup_stm32f303xc.s
+      Include file:  Drivers\CMSIS\Device\ST\STM32F3xx\Include\stm32f3xx.h
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

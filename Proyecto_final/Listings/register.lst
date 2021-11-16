@@ -15,13 +15,7 @@ ARM Macro Assembler    Page 1
     8 00000000         
     9 00000000         RD_display
    10 00000000         loop
-   11 00000000 7802            ldrb             r2, [r0]
-   12 00000002 3001            adds             r0, #1
-   13 00000004 700A            strb             r2, [r1]
-   14 00000006 3101            adds             r1, #1
-   15 00000008 2A00            cmp              r2, #0
-   16 0000000A D1F9            bne              loop
-   17 0000000C         
+   11 00000000         
                        
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
 interwork --depend=.\objects\register.d -o.\objects\register.o -I.\RTE\_Target_
@@ -58,7 +52,7 @@ Symbol: loop
    Definitions
       At line 10 in file register.s
    Uses
-      At line 16 in file register.s
-Comment: loop used once
+      None
+Comment: loop unused
 3 symbols
-338 symbols in table
+337 symbols in table

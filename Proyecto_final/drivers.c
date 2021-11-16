@@ -4,15 +4,17 @@
 
 char tx_string[32];
 char data;
+char *token[]={" "," "," "," "," "};
+
 
 uint8_t n=0;
 uint8_t coman_ready=0;
 
-extern void RD_display( const char a[]);
+extern void RD_display();
 
 
-void Rd_get(const char* a[]){
-	RD_display(*a);
+void Rd_get(){
+	RD_display();
 }
 
 void Rm_mod(){
@@ -31,6 +33,7 @@ void Mm(uint16_t addr, uint8_t size){
 
 
 
+
 void clk_config(void){
 		// PLLMUL <- 0x0E (PLL input clock x 16 --> (8 MHz / 2) * 16 = 64 MHz )  
 	RCC->CFGR |= 0xE<<18;
@@ -43,9 +46,7 @@ void clk_config(void){
 	RCC->CFGR |= 0x402;
 	while (!(RCC->CFGR & RCC_CFGR_SWS_PLL));
 	SystemCoreClockUpdate();
-	SysTick_Config(SystemCoreClock/10);
 }
-
 //puerto serial config PC5 Y PC4
 void USART1_config(void){
 	RCC->AHBENR |= RCC_AHBENR_GPIOCEN ; 																	//clock puerto c
@@ -90,3 +91,62 @@ void USART1_IRQHandler(void){
 		}
 	}
 }
+
+
+		
+
+
+void printconsol(void){ //se despliega el simobolo >>
+		coman_ready=0;
+		USART1_putString(">> ");
+	
+}
+void help(void){
+	USART1_putString("COMANDO|------PARAMETROS|-------------|FUNCION\r\n");
+	USART1_putString("cls    |----------------|-------------|limpia el display    \r\n");
+	USART1_putString("RD     |----------------|-------------|despliega el contenido de los registros del cpu          \r\n");
+
+	coman_ready=0;
+	
+}
+void clear(void){	//se hace un salto en el puerto serial el que hace una limpieza de pantalla
+	USART1_putString("\033[H\033[J");
+}
+void iomap(uint8_t nPin, uint8_t mode){
+	
+}
+
+
+
+void opciones(void){
+	if(!strcmp(token[0],"-h")){
+		help();
+		printconsol();
+	}else if(!strcmp(token[0],"cls")){
+		clear();
+		printconsol();
+	}else if(!strcmp(token[0],"RD")){
+			
+		
+		
+		
+		
+		
+		
+	}else{
+		USART1_putString("Ingrese un comando correcto \r\n");
+		printconsol();
+	}
+}
+
+void Read_uart(void){
+		if(coman_ready){		
+			token[0]=strtok(tx_string," ");
+			token[1]=strtok(NULL," ");
+			token[2]=strtok(NULL," ");
+			token[3]=strtok(NULL," ");
+			token[4]=strtok(NULL," ");
+			opciones();
+			
+		}
+	}
