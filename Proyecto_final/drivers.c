@@ -134,6 +134,9 @@ void help(void){
 	USART1_putString("MD     |----addr data size---|-------------|Escribir Data en la dirección de memoria addr size determina              |\r\n");
 	USART1_putString("                                           |El def es 1, pero 1, 2 y 4son los tamanos requeridos.                     |\r\n");	
 	USART1_putString("                                           |el tamaño en bytes El dato y la direccion se debenexpresar en hexadecimal |\r\n");	
+	USART1_putString("MM     |--addr data [size]---|-------------|Escribir Data en la dirección de memoria addr.                            |\r\n");
+	USART1_putString("                                           |El def es 1, pero 1, 2 y 4son los tamanos requeridos.                     |\r\n");	
+	USART1_putString("                                           |el tamaño en bytes El dato y la direccion se debenexpresar en hexadecimal |\r\n");
 	
 }
 void clear(void){	//se hace un salto en el puerto serial el que hace una limpieza de pantalla
@@ -170,10 +173,9 @@ void opciones(void){
 		MD(inicio,fin);
 	restr=(fin-inicio);
 		USART1_putString("\n\r");
-		for(i=0;i<restr;i++){	
+		for(i=0;i<=restr;i++){	
 			sprintf(D,"%x",memo_array[i]);
 			USART1_putString(D);	
-			
 		}
 
 			
