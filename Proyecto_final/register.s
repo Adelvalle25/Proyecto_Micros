@@ -9,6 +9,8 @@
 		EXPORT MM_BYTE
 		EXPORT MM_HALF
 		EXPORT MM_WORD
+		EXPORT RUN 
+		EXPORT CALL
 			
 		extern resgister ;arreglo para display
 		extern memo
@@ -145,17 +147,25 @@ MM_BYTE
 	push{lr}
 	strb r1, [r0]
 	pop{pc}
+	bx lr
 	
 MM_HALF
 	push{lr}
 	strh r1, [r0]
 	pop{pc}
+	bx lr
 	
 MM_WORD
 	push{lr}
 	str r1, [r0]
 	pop{pc}
-
+	bx lr
+	
+RUN 
+	bx r0
+CALL
+	blx r0
+	bx lr
 
 	nop
 	END

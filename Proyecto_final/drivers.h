@@ -20,6 +20,7 @@ void Read_uart(void);
 void printconsol(void);
 void help(void);
 void printconsol(void);
+void PWM_Init(uint32_t freq_hz);
 #endif /* __UTILITIES_H__*/
 
 
