@@ -10,3 +10,4 @@
 .\objects\drivers.o: C:\Users\aadel\AppData\Local\Arm\Packs\Keil\STM32F3xx_DFP\2.1.0\Drivers\CMSIS\Device\ST\STM32F3xx\Include\system_stm32f3xx.h
 .\objects\drivers.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\drivers.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\drivers.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

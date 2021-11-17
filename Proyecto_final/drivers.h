@@ -7,9 +7,9 @@
 
 
 void Rd_get(void);   
-void Rm_mod();
-void Md(const uint8_t start, const uint8_t end);
-void Mm(uint16_t addr, uint8_t size);
+void Rm_mod(uint32_t ref, uint32_t da);
+void Md(void);
+void Mm(void);
 
 
 void clk_config(void);

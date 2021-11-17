@@ -1,39 +1,51 @@
 #include "stm32f3xx.h"                  // Device header
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 char tx_string[32];
 char data;
 char *token[]={" "," "," "," "," "};
+char D[64];
+char D2[64];
+char D3[64];
+char D4[64];
 
-
+uint32_t da;
+uint32_t ref;
+uint32_t resgister[16];
 uint8_t n=0;
 uint8_t coman_ready=0;
+uint32_t i;
+uint8_t memo;
+uint32_t registro_rm;
+uint32_t data_rm;
 
-extern void RD_display();
+extern void RD_display(void);
+extern void RM(uint32_t registro, uint32_t data);
 
 
-void Rd_get(){
-	RD_display();
+
+
+
+
+
+void USART1_IRQHandler(void){
+	if(USART1->ISR & USART_ISR_RXNE){
+		data= USART1->RDR;
+		USART1->TDR=data;
+		if(data !=  '\r'){
+			tx_string[n]=data;
+			n++;
+			coman_ready = 0;
+		}else{
+			tx_string[n] = '\0';
+			n=0;
+			coman_ready = 1;
+		}
+
+	}
 }
-
-void Rm_mod(){
-	
-}
-
-void Md(const uint8_t start, const uint8_t end){
-	
-}
-void Mm(uint16_t addr, uint8_t size){
-	
-}
-
-
-
-
-
-
-
 void clk_config(void){
 		// PLLMUL <- 0x0E (PLL input clock x 16 --> (8 MHz / 2) * 16 = 64 MHz )  
 	RCC->CFGR |= 0xE<<18;
@@ -77,45 +89,51 @@ void USART1_putString(char * string){
 	}
 }
 
-void USART1_IRQHandler(void){
-	if(USART1->ISR & USART_ISR_RXNE){
-		data= USART1->RDR;
-		if(data !=  '\r'){
-			tx_string[n]=data;
-			n++;
-			coman_ready = 0;
-		}else{
-			tx_string[n] = '\0';
-			n=0;
-			coman_ready = 1;
-		}
-	}
-}
-
-
-		
-
 
 void printconsol(void){ //se despliega el simobolo >>
 		coman_ready=0;
 		USART1_putString(">> ");
 	
 }
-void help(void){
-	USART1_putString("COMANDO|------PARAMETROS|-------------|FUNCION\r\n");
-	USART1_putString("cls    |----------------|-------------|limpia el display    \r\n");
-	USART1_putString("RD     |----------------|-------------|despliega el contenido de los registros del cpu          \r\n");
+void Rd_get(void){
+	RD_display();
+	for(i=0; i<=15; i++){
+		sprintf(D,"R%d",i);
+		sprintf(D3,"--->0x%08X\n\r",resgister[i]);
+		strcat(strcpy(D2,D),D3);
+		USART1_putString(D2);
+	}
+	
+}
 
-	coman_ready=0;
+void Rm_mod(uint32_t ref, uint32_t da){
+	RM(ref,da);
+}
+
+void Md(void){
+	
+}
+void Mm(uint16_t addr, uint8_t size){
+	
+}
+		
+
+
+
+void help(void){
+	USART1_putString("\33[100m\33[1mCOMANDO|------PARAMETROS-----|-------------|                            FUNCION                                       |\033[0m\r\n");
+	USART1_putString("cls    |---------------------|-------------|limpia el display                                                         |\r\n");
+	USART1_putString("RD     |---------------------|-------------|despliega el contenido de los registros del memoria                       |\r\n");
+	USART1_putString("RD     |---------------------|-------------|despliega el contenido de los registros del memoria                       |\r\n");
+	USART1_putString("RM     |------R{x} data------|-------------|Modifica el contenido del registro indicado en data                       |\r\n");
+	USART1_putString("MD     |----addr data size---|-------------|Escribir Data en la dirección de memoria addr size determina              |\r\n");
+	USART1_putString("                                           |El def es 1, pero 1, 2 y 4son los tamanos requeridos.                     |\r\n");	
+	USART1_putString("                                           |el tamaño en bytes El dato y la direccion se debenexpresar en hexadecimal |\r\n");	
 	
 }
 void clear(void){	//se hace un salto en el puerto serial el que hace una limpieza de pantalla
 	USART1_putString("\033[H\033[J");
 }
-void iomap(uint8_t nPin, uint8_t mode){
-	
-}
-
 
 
 void opciones(void){
@@ -126,12 +144,13 @@ void opciones(void){
 		clear();
 		printconsol();
 	}else if(!strcmp(token[0],"RD")){
-			
-		
-		
-		
-		
-		
+			Rd_get();
+			printconsol();
+	}else if(!strcmp(token[0],"RM")){
+		ref=(uint32_t)strtoll(token[1], &token[1], 10);
+		da = (uint32_t)strtoll(token[2], &token[2], 16);
+		Rm_mod(ref, da);
+		printconsol();
 		
 	}else{
 		USART1_putString("Ingrese un comando correcto \r\n");

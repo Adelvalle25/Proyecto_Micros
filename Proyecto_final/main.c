@@ -11,7 +11,7 @@ int main(void){
 	USART1_config();
 	
 		USART1_putString("\33[104m---------------------------------------------------------------\033[0m\n\r");
-		USART1_putString("\33[100m \33[1m		Proyecto final														\n\r");
+		USART1_putString("\33[100m\33[1m		Proyecto final														\n\r");
 		USART1_putString("integrantes :  																									\n\r");
 		USART1_putString("-Andres del Valle 18005802 																			\n\r");
 		USART1_putString("-Melissa Gonzalez 19003141																			\n\r");
