@@ -19,7 +19,6 @@ void USART1_putString(char * string);
 void Read_uart(void);
 void printconsol(void);
 void help(void);
-void iomap(uint8_t nPin, uint8_t mode);
 void printconsol(void);
 #endif /* __UTILITIES_H__*/
 

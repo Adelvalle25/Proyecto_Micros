@@ -5,9 +5,14 @@
 
 		EXPORT RD_display
 		EXPORT RM
+		EXPORT MD
+		EXPORT MM_BYTE
+		EXPORT MM_HALF
+		EXPORT MM_WORD
 			
 		extern resgister ;arreglo para display
 		extern memo
+		extern memo_array
 ;Register display 
 RD_display	
 	push{r0}
@@ -61,9 +66,7 @@ RM
 	cmp r0, #11
 	beq r_11
 	cmp r0, #12
-	beq r_13
-	cmp r0, #14
-	beq r_14
+	beq r_12
 	pop{pc}
 r_0
 	push{lr}
@@ -117,14 +120,7 @@ r_12
 	push{lr}
 	movs r12, r1
 	pop{pc}
-r_13
-	push{lr}
-;	movs r13, r1
-	pop{pc}
-r_14
-	push{lr}
-	movs r14, r1
-	pop{pc}
+
 
 ;Memory Display
 MD
@@ -133,8 +129,11 @@ MD
 	ldrb r5, [r0]
 	add r0, r0, #1
 	push{r0}
+	ldr r3, =memo_array
 	ldr r0, =memo 
 	str r5, [r0]
+	str r5, [r3,r6]
+	add r6, r6, #1
 	pop{r0}
 	b MD
 end_loop

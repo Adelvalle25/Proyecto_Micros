@@ -20,7 +20,7 @@ int main(void){
 		USART1_putString("-Carlos Barrera   19000732																				\n\r");
 		USART1_putString("\33[91m'-h' para abrir el menu de ayuda											\033[0m		\n\r");
 		USART1_putString("\33[104m-----------------------------------------------------------------\033[0m\n\r");
-		printconsol();
+		USART1_putString("\n\r>> ");	
 
 	while(1){
 		Read_uart();

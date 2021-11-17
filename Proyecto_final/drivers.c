@@ -17,15 +17,25 @@ uint32_t resgister[16];
 uint8_t n=0;
 uint8_t coman_ready=0;
 uint32_t i;
+
 uint8_t memo;
+
 uint32_t registro_rm;
 uint32_t data_rm;
 
+uint32_t direct;
+uint32_t datamm;
+
+uint32_t inicio;
+uint32_t fin;
+uint8_t memo_array[16];
+uint32_t restr;
 extern void RD_display(void);
 extern void RM(uint32_t registro, uint32_t data);
-
-
-
+extern void MM_BYTE(uint32_t direct, uint32_t data);
+extern void MM_HALF(uint32_t direct, uint32_t data);
+extern void MM_WORD(uint32_t direct, uint32_t data);
+extern void MD(uint32_t inicio, uint32_t fin);
 
 
 
@@ -36,13 +46,21 @@ void USART1_IRQHandler(void){
 		USART1->TDR=data;
 		if(data !=  '\r'){
 			tx_string[n]=data;
-			n++;
+			if(data==0x7F){
+				tx_string[n]=NULL;
+				tx_string[n-1]=NULL;
+				n=n-1;
+			}else{
+				n++;
+			}
 			coman_ready = 0;
 		}else{
 			tx_string[n] = '\0';
 			n=0;
 			coman_ready = 1;
 		}
+		
+		
 
 	}
 }
@@ -90,11 +108,8 @@ void USART1_putString(char * string){
 }
 
 
-void printconsol(void){ //se despliega el simobolo >>
-		coman_ready=0;
-		USART1_putString(">> ");
-	
-}
+
+
 void Rd_get(void){
 	RD_display();
 	for(i=0; i<=15; i++){
@@ -103,19 +118,10 @@ void Rd_get(void){
 		strcat(strcpy(D2,D),D3);
 		USART1_putString(D2);
 	}
-	
 }
 
-void Rm_mod(uint32_t ref, uint32_t da){
-	RM(ref,da);
-}
 
-void Md(void){
-	
-}
-void Mm(uint16_t addr, uint8_t size){
-	
-}
+
 		
 
 
@@ -123,7 +129,6 @@ void Mm(uint16_t addr, uint8_t size){
 void help(void){
 	USART1_putString("\33[100m\33[1mCOMANDO|------PARAMETROS-----|-------------|                            FUNCION                                       |\033[0m\r\n");
 	USART1_putString("cls    |---------------------|-------------|limpia el display                                                         |\r\n");
-	USART1_putString("RD     |---------------------|-------------|despliega el contenido de los registros del memoria                       |\r\n");
 	USART1_putString("RD     |---------------------|-------------|despliega el contenido de los registros del memoria                       |\r\n");
 	USART1_putString("RM     |------R{x} data------|-------------|Modifica el contenido del registro indicado en data                       |\r\n");
 	USART1_putString("MD     |----addr data size---|-------------|Escribir Data en la dirección de memoria addr size determina              |\r\n");
@@ -139,23 +144,67 @@ void clear(void){	//se hace un salto en el puerto serial el que hace una limpiez
 void opciones(void){
 	if(!strcmp(token[0],"-h")){
 		help();
-		printconsol();
-	}else if(!strcmp(token[0],"cls")){
+		coman_ready=0;
+		USART1_putString("\n\r>> ");	
+		
+	}else if(!strcmp(token[0],"cls")||(!strcmp(token[0],"CLS"))){
 		clear();
-		printconsol();
-	}else if(!strcmp(token[0],"RD")){
+		coman_ready=0;
+		USART1_putString("\n\r>> ");	
+		
+	}else if((!strcmp(token[0],"RD"))||(!strcmp(token[0],"rd"))){
 			Rd_get();
-			printconsol();
-	}else if(!strcmp(token[0],"RM")){
+			coman_ready=0;
+		USART1_putString("\n\r>> ");	
+		
+	}else if((!strcmp(token[0],"RM"))||(!strcmp(token[0],"rm"))){
 		ref=(uint32_t)strtoll(token[1], &token[1], 10);
 		da = (uint32_t)strtoll(token[2], &token[2], 16);
-		Rm_mod(ref, da);
-		printconsol();
+		RM(da,ref);
+		Rd_get();
+		coman_ready=0;
+		USART1_putString("\n\r>> ");	
+	}else if((!strcmp(token[0],"MD"))||(!strcmp(token[0],"md"))){
+			inicio=(uint32_t)strtoll(token[1], &token[1], 16);
+			fin= (uint32_t)strtoll(token[2], &token[2], 16);
+		MD(inicio,fin);
+	restr=(fin-inicio);
+		USART1_putString("\n\r");
+		for(i=0;i<restr;i++){	
+			sprintf(D,"%x",memo_array[i]);
+			USART1_putString(D);	
+			
+		}
+
+			
+		coman_ready=0;
+		USART1_putString("\n\r>> ");	
+		
+	}else if((!strcmp(token[0],"MM"))||(!strcmp(token[0],"mm"))){
+		if(!strcmp(token[3],"2")){
+			direct=(uint32_t)strtoll(token[1], &token[1], 16);
+			datamm= (uint32_t)strtoll(token[2], &token[2], 16);
+			MM_HALF(direct,datamm);
+		}else if(!strcmp(token[3],"4")){
+			direct=(uint32_t)strtoll(token[1], &token[1], 16);
+			datamm= (uint32_t)strtoll(token[2], &token[2], 16);
+			MM_WORD(direct,datamm);
+		}else {
+			direct=(uint32_t)strtoll(token[1], &token[1], 16);
+			datamm= (uint32_t)strtoll(token[2], &token[2], 16);
+			MM_BYTE(direct,datamm);
+		}
+		
+		coman_ready=0;
+		USART1_putString("\n\r>> ");
+	}else if((!strcmp(token[0],"MD"))||(!strcmp(token[0],"md"))){
 		
 	}else{
 		USART1_putString("Ingrese un comando correcto \r\n");
-		printconsol();
+			coman_ready=0;
+		USART1_putString("\n\r>> ");	
 	}
+	
 }
 
 void Read_uart(void){
